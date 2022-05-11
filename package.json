@@ -22,9 +22,7 @@
         "jest": "28.1.0",
         "nodemon": "2.0.15",
         "supertest": "6.2.2",
-        "ts-jest": "28.0.2",
-        "ts-node": "10.7.0",
-        "typescript": "4.6.4"
+        "ts-jest": "28.0.2"
     },
     "dependencies": {
         "apollo-server-express": "3.6.7",
@@ -38,6 +36,8 @@
         "reflect-metadata": "0.1.13",
         "type-graphql": "1.1.1",
         "typeorm": "0.3.6",
-        "ws": "8.6.0"
+        "ws": "8.6.0",
+        "ts-node": "10.7.0",
+        "typescript": "4.6.4"
     }
 }
