@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "NODE_ENV=development nodemon src/index.ts",
-        "build": "tsc -p ./tsconfig.json",
+        
         "start": "NODE_ENV=production node dist/index.js",
+        "dev": "NODE_ENV=development nodemon src/index.ts",
         "test": "jest __test__/"
     },
     "keywords": [],

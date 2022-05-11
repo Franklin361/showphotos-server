@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fake_comment = exports.fake_update_post = exports.fake_post = exports.URL_SERVER = exports.fake_user = exports.QUERY_GET_BY_DESC = exports.QUERY_GET_FAVORITES_BY_USER = exports.QUERY_UPDATE_LIKES_POST = exports.QUERY_CREATE_COMMENT = exports.QUERY_GET_SORT = exports.QUERY_GET_POST_BY_ID = exports.QUERY_GET_POST_BY_USER = exports.QUERY_DELETE_POST = exports.QUERY_UPDATE_POST = exports.QUERY_CREATE_POST = exports.QUERY_LOGIN = exports.QUERY_DELETE_USER = exports.QUERY_CREATE_USER = void 0;
+var query_1 = require("./query");
+Object.defineProperty(exports, "QUERY_CREATE_USER", { enumerable: true, get: function () { return query_1.QUERY_CREATE_USER; } });
+Object.defineProperty(exports, "QUERY_DELETE_USER", { enumerable: true, get: function () { return query_1.QUERY_DELETE_USER; } });
+Object.defineProperty(exports, "QUERY_LOGIN", { enumerable: true, get: function () { return query_1.QUERY_LOGIN; } });
+Object.defineProperty(exports, "QUERY_CREATE_POST", { enumerable: true, get: function () { return query_1.QUERY_CREATE_POST; } });
+Object.defineProperty(exports, "QUERY_UPDATE_POST", { enumerable: true, get: function () { return query_1.QUERY_UPDATE_POST; } });
+Object.defineProperty(exports, "QUERY_DELETE_POST", { enumerable: true, get: function () { return query_1.QUERY_DELETE_POST; } });
+Object.defineProperty(exports, "QUERY_GET_POST_BY_USER", { enumerable: true, get: function () { return query_1.QUERY_GET_POST_BY_USER; } });
+Object.defineProperty(exports, "QUERY_GET_POST_BY_ID", { enumerable: true, get: function () { return query_1.QUERY_GET_POST_BY_ID; } });
+Object.defineProperty(exports, "QUERY_GET_SORT", { enumerable: true, get: function () { return query_1.QUERY_GET_SORT; } });
+Object.defineProperty(exports, "QUERY_CREATE_COMMENT", { enumerable: true, get: function () { return query_1.QUERY_CREATE_COMMENT; } });
+Object.defineProperty(exports, "QUERY_UPDATE_LIKES_POST", { enumerable: true, get: function () { return query_1.QUERY_UPDATE_LIKES_POST; } });
+Object.defineProperty(exports, "QUERY_GET_FAVORITES_BY_USER", { enumerable: true, get: function () { return query_1.QUERY_GET_FAVORITES_BY_USER; } });
+Object.defineProperty(exports, "QUERY_GET_BY_DESC", { enumerable: true, get: function () { return query_1.QUERY_GET_BY_DESC; } });
+var data_1 = require("./data");
+Object.defineProperty(exports, "fake_user", { enumerable: true, get: function () { return data_1.fake_user; } });
+Object.defineProperty(exports, "URL_SERVER", { enumerable: true, get: function () { return data_1.URL_SERVER; } });
+Object.defineProperty(exports, "fake_post", { enumerable: true, get: function () { return data_1.fake_post; } });
+Object.defineProperty(exports, "fake_update_post", { enumerable: true, get: function () { return data_1.fake_update_post; } });
+Object.defineProperty(exports, "fake_comment", { enumerable: true, get: function () { return data_1.fake_comment; } });
+//# sourceMappingURL=index.js.map
