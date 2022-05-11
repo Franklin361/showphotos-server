@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        
+        "build":"",
         "start": "NODE_ENV=production node dist/index.js",
         "dev": "NODE_ENV=development nodemon src/index.ts",
         "test": "jest __test__/"
