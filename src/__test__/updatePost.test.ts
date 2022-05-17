@@ -24,14 +24,14 @@ describe("POST IMAGE 👉 UPDATE POST", () => {
         let fake_token = "faketokenuser";
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: fake_token }).send(QUERY_UPDATE_POST);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
     
     test("It should display an error if the token is not sent.", async() => {
         const { body } = await request(URL_SERVER).post("/").send(QUERY_UPDATE_POST);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
     
@@ -51,7 +51,7 @@ describe("POST IMAGE 👉 UPDATE POST", () => {
         // TODO: to do expects
         const { description, url_image } = fake_update_post;
         
-        expect(body?.data.updatePostImage.message).toBe('POST acutalizado');
+        expect(body?.data.updatePostImage.message).toBe('Post was  updated successfully ✅');
         expect(body?.data.updatePostImage.post.id).toBe(id_post);
         expect(body?.data.updatePostImage.post.url_image).toBe(url_image);
         expect(body?.data.updatePostImage.post.description).toBe(description);
@@ -99,7 +99,7 @@ describe("POST IMAGE 👉 UPDATE POST", () => {
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: token_user2 }).send(QUERY_UPDATE_POST);
 
         // TODO: to do expects
-        expect(body?.errors[0].message).toBe(`Tú no tienes privilegios para editar este Post`);
+        expect(body?.errors[0].message).toBe(`You don't have privileges to edit this Post 😡 `);
         expect(body?.data).toBeNull();
         
         // TODO: delete user created

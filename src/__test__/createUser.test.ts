@@ -25,7 +25,7 @@ describe("USER 👉 CREATE USER", () => {
         let id_user = body?.data.createUser.user.id;
         let token = body?.data.createUser.token;
         // to do expects
-        expect(body?.data.createUser.message).toBe("Creación de usuario correcto");
+        expect(body?.data.createUser.message).toBe("User created successfully ✅");
         expect(body?.data.createUser.user.name).toBe(fake_user.name);
         expect(body?.data.createUser.user.email).toBe(fake_user.email);
         // delete user creted
@@ -42,7 +42,7 @@ describe("USER 👉 CREATE USER", () => {
         const result = await request(URL_SERVER).post("/").send(QUERY_CREATE_USER);
         
         // to do expects
-        expect(result.body?.errors[0].message).toBe("El email ya esta registrado");
+        expect(result.body?.errors[0].message).toBe("The email address is already registered 🧐");
         expect(result.body?.data).toBeNull();
 
         // delete user created
@@ -59,7 +59,7 @@ describe("USER 👉 CREATE USER", () => {
         const { body } = await request(URL_SERVER).post("/").send(QUERY_CREATE_USER);
 
         // TODO: to do expects
-        expect(body?.errors[0].message).toBe(`El campo ${prop} es obligatorio`);
+        expect(body?.errors[0].message).toBe(`The field ${prop} is required`);
         expect(body?.data).toBeNull();
     });
 

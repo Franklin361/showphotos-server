@@ -1,49 +1,13 @@
-import { Context } from "apollo-server-core";
-import { PubSubEngine } from "graphql-subscriptions";
-import { Arg, Ctx, Field, InputType, Mutation, Resolver, Query, Subscription, PubSub, Root } from "type-graphql";
-import { PostResponse, Post, User } from "../entity";
-
 import { AuthenticationError, ValidationError, UserInputError } from 'apollo-server-express';
-import { isCorrectInputs, trigger } from "../utils";
-import { Favorite } from '../entity/Favorite';
+import { Context } from "apollo-server-core";
 import { Like } from "typeorm";
+import { PubSubEngine } from "graphql-subscriptions";
+import { Arg, Ctx,  Mutation, Resolver, Query, Subscription, PubSub } from "type-graphql";
+import { PostResponse, Post, User, Favorite } from "../entity";
 
-export interface IContextServer {
-    id_user_token: string;
-}
-
-@InputType()
-class PostInput {
-    @Field()
-    description: string = '';
-
-    @Field()
-    url_image: string = '';
-}
-
-@InputType()
-class PutPostInput {
-    @Field()
-    id!: string;
-
-    @Field({ nullable: true })
-    description!: string;
-
-    @Field({ nullable: true })
-    url_image!: string;
-}
-
-@InputType()
-class LikeDislikePostInput {
-    @Field()
-    id!: string;
-
-    @Field()
-    likes!: boolean;
-
-    @Field()
-    dislike!: boolean;
-}
+import { LikeDislikePostInput, PostInput, PutPostInput } from "../inputs";
+import { isCorrectInputs, trigger } from "../utils";
+import { IContextServer } from '../interface'
 
 @Resolver()
 export class PostResolver {
@@ -55,13 +19,15 @@ export class PostResolver {
         @PubSub() pubSub: PubSubEngine
     ) {
 
-        if (!id) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const value = isCorrectInputs(variables);
-        if (value) throw new UserInputError(`El campo ${value} es obligatorio`);
+        if (value) throw new UserInputError(`The field ${value} is required`);
 
-        const user = await User.findOne({ where: { id: +id } });
-        if (!user) throw new AuthenticationError("User no exists");
+        const user = await User.findOne({ where: { id: +id }, relations: { posts: true } });
+        if (!user) throw new AuthenticationError("User doesn't exist 🤨");
+
+        if(+user.posts.length >= 4) throw new UserInputError('You can only create a maximum of 4 photo posts 🧐')
 
         const post = await Post.create({
             ...variables,
@@ -69,10 +35,10 @@ export class PostResolver {
         }).save();
         
         await pubSub.publish(trigger.POST_ADDED, null);
-
+        
         return {
             post,
-            message: "Creación de POST correcto",
+            message: "The Post was created successfully ✅",
         };
     }
 
@@ -92,7 +58,7 @@ export class PostResolver {
         @Ctx() { id_user_token: id }: Context<IContextServer>,
         @PubSub() pubSub: PubSubEngine
     ) {
-        if (!id) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
         // TODO: actualizar todo menos los likes y dislikes
         const { id: id_post, ...rest } = variables;
 
@@ -100,7 +66,7 @@ export class PostResolver {
 
         if (!post) throw new ValidationError("Post no exists");
 
-        if (+post.user.id !== +id) throw new AuthenticationError("Tú no tienes privilegios para editar este Post");
+        if (+post.user.id !== +id) throw new AuthenticationError("You don't have privileges to edit this Post 😡 ");
 
 
         post.description = rest.description ?? post.description;
@@ -111,7 +77,7 @@ export class PostResolver {
         await pubSub.publish(trigger.POST_ADDED, null);
 
         return {
-            message: "POST acutalizado",
+            message: "Post was  updated successfully ✅",
             post: newPost,
         };
     }
@@ -123,7 +89,7 @@ export class PostResolver {
         @Ctx() { id_user_token: id }: Context<IContextServer>,
         @PubSub() pubSub: PubSubEngine
     ) {
-        if (!id) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const { id: id_post, ...rest } = variables;
         // PromiseAll.
@@ -181,31 +147,31 @@ export class PostResolver {
         @Arg("id") id: string,
         @PubSub() pubSub: PubSubEngine
     ) {
-        if (!id_user_token) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id_user_token) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const post = await Post.findOne({ where: { id: +id }, relations: { user: true } });
 
         if (!post) throw new ValidationError("Post no exists");
 
         if (+post.user.id !== +id_user_token)
-            throw new AuthenticationError("Tú no tienes privilegios para eliminar este Post");
+            throw new AuthenticationError("You don't have privileges to delete this Post 😡");
 
         try {
             await Post.delete(+id);
             await pubSub.publish(trigger.POST_ADDED, null);
             return {
                 post,
-                message: "Post eliminado correctamente",
+                message: "The Post  deleted successfully ✅",
             };
         } catch (error) {
             const { message } = error as Error;
-            throw new ValidationError("No se logro eliminar el post, " + message);
+            throw new ValidationError("Failed to delete the post 😞, " + message);
         }
     }
     // getPostByUser - when user logs in to his or her perfil page
     @Query(() => [Post])
     async getPostByUser(@Ctx() { id_user_token }: Context<IContextServer>) {
-        if (!id_user_token) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id_user_token) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const posts = await Post.find({ where: { user: { id: +id_user_token } }, relations: { user: true }, order: { createdAt: 'DESC' } });
 
@@ -214,7 +180,7 @@ export class PostResolver {
 
     @Query(() => Post)
     async getPostById(@Ctx() { id_user_token }: Context<IContextServer>, @Arg("id") id: string) {
-        if (!id_user_token) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id_user_token) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const post = await Post.findOne({
             where: { id: +id },
@@ -231,7 +197,7 @@ export class PostResolver {
         @Ctx() { id_user_token }: Context<IContextServer>,
         @Arg("type_sort") type_sort: 'likes' | 'dislike' | 'createdAt'
     ) {
-        if (!id_user_token) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id_user_token) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         if (!(['likes', 'dislike', 'createdAt'].includes(type_sort))) throw new ValidationError('Type sort invalid')
 
@@ -244,7 +210,7 @@ export class PostResolver {
         @Ctx() { id_user_token }: Context<IContextServer>,
         @Arg("description") description: string
     ) {
-        if (!id_user_token) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id_user_token) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const posts = await Post.find({ where: { description: Like(`%${description}%`) }, relations: { user: true } });
 

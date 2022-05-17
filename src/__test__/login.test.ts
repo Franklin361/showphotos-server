@@ -30,7 +30,7 @@ describe("USER 👉 USER LOGIN", () => {
 
         const result = await request(URL_SERVER).post("/").send(QUERY_LOGIN);
 
-        expect(result.body?.data.login.message).toBe("Inicio de sesión exitoso");
+        expect(result.body?.data.login.message).toBe("Successful login ✅✅");
         expect(result.body?.data.login.user.email).toBe(email);
         expect(result.body?.data.login.user.name).toBe(name);
         expect(result.body?.data.login.user.id).toBe(id_user);
@@ -41,7 +41,7 @@ describe("USER 👉 USER LOGIN", () => {
 
     test("It should display a 'user does not exist' message.", async () => {
         const result = await request(URL_SERVER).post("/").send(QUERY_LOGIN);
-        expect(result.body?.errors[0].message).toBe("El usuario no existe");
+        expect(result.body?.errors[0].message).toBe("User doesn't exist 🤨");
         expect(result.body?.data).toBeNull();
     });
 
@@ -52,7 +52,7 @@ describe("USER 👉 USER LOGIN", () => {
 
         QUERY_LOGIN.variables.variables.password = "incorrect password";
         const result = await request(URL_SERVER).post("/").send(QUERY_LOGIN);
-        expect(result.body?.errors[0].message).toBe("La contraseña es incorrecta");
+        expect(result.body?.errors[0].message).toBe("The password is incorrect ❌");
 
         
         await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_DELETE_USER);

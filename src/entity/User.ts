@@ -23,13 +23,13 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     password!: string;
 
-    @Field(() => Post)
+    @Field(() => [Post])
     @OneToMany(() => Post, post => post.user)
-    posts!: Post;
+    posts!: [Post];
 
-    @Field(() => Comment, { nullable: true })
+    @Field(() => [Comment], { nullable: true })
     @OneToMany(() => Comment, comment => comment.user)
-    comments!: Comment;
+    comments!: [Comment];
 
     @Field(() => [Favorite], { nullable: true })
     @OneToMany(() => Favorite, fav => fav.user)

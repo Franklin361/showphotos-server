@@ -30,7 +30,7 @@ describe("POST IMAGE 👉 DELETE POST", () => {
         QUERY_DELETE_POST.variables.deletePostImageId = `${id_post}`
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_DELETE_POST);
 
-        expect(body?.data.deletePostImage.message).toBe('Post eliminado correctamente');
+        expect(body?.data.deletePostImage.message).toBe('The Post  deleted successfully ✅');
 
         const resd = await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_DELETE_USER);
         console.log(resd.body)
@@ -40,14 +40,14 @@ describe("POST IMAGE 👉 DELETE POST", () => {
         let fake_token = "faketokenuser";
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: fake_token }).send(QUERY_DELETE_POST);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
 
     test("It should display an error if the token is not sent.", async() => {
         const { body } = await request(URL_SERVER).post("/").send(QUERY_DELETE_POST);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
 
@@ -88,7 +88,7 @@ describe("POST IMAGE 👉 DELETE POST", () => {
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: token_user2 }).send(QUERY_DELETE_POST);
 
         // TODO: to do expects
-        expect(body?.errors[0].message).toBe(`Tú no tienes privilegios para eliminar este Post`);
+        expect(body?.errors[0].message).toBe(`You don't have privileges to delete this Post 😡`);
         expect(body?.data).toBeNull();
         
         // TODO: delete user created

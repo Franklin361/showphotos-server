@@ -3,11 +3,9 @@ import {  Resolver, Ctx, Query, Arg } from 'type-graphql';
 import { Context } from 'apollo-server-core';
 import { AuthenticationError, ValidationError } from 'apollo-server-express';
 import { Favorite, Post } from '../entity';
+import { IContextServer } from '../interface';
 
 
-export interface IContextServer {
-    id_user_token: string;
-}
 
 @Resolver()
 export class FavoriteResolver {
@@ -15,7 +13,7 @@ export class FavoriteResolver {
     async getFavoritesByUser(
         @Ctx() { id_user_token:id }: Context<IContextServer>
     ) {
-        if (!id) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
         
         const favs = await Favorite.find({
             where:{
@@ -35,7 +33,7 @@ export class FavoriteResolver {
         @Ctx() { id_user_token:id }: Context<IContextServer>,
         @Arg("id") id_post: string
     ) {
-        if (!id) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
 
         const post = await Post.findOne({where:{ id: +id_post }});
 

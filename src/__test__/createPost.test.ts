@@ -30,7 +30,7 @@ describe("POST IMAGE 👉 CREATE POST", () => {
 
         expect( body?.data.createPostImage.post.description).toBe(description)
         expect( body?.data.createPostImage.post.url_image).toBe(url_image)
-        expect( body?.data.createPostImage.message).toBe('Creación de POST correcto')
+        expect( body?.data.createPostImage.message).toBe('The Post was created successfully ✅')
         expect( body?.data.createPostImage.post.user.id).toBe(id_user)
 
         await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_DELETE_USER);
@@ -40,13 +40,13 @@ describe("POST IMAGE 👉 CREATE POST", () => {
         let fake_token = "faketokenuser";
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: fake_token }).send(QUERY_CREATE_POST);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
 
     test("It should display an error if the token is not sent.", async () => {
         const { body } = await request(URL_SERVER).post("/").send(QUERY_CREATE_POST);
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
 
@@ -59,7 +59,7 @@ describe("POST IMAGE 👉 CREATE POST", () => {
 
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_CREATE_POST);
 
-        expect(body?.errors[0].message).toBe('User no exists');
+        expect(body?.errors[0].message).toBe('User doesn't exist 🤨');
         expect(body?.data).toBeNull();
     });
 
@@ -76,7 +76,7 @@ describe("POST IMAGE 👉 CREATE POST", () => {
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_CREATE_POST);
 
         // TODO: to do expects
-        expect(body?.errors[0].message).toBe(`El campo ${prop} es obligatorio`);
+        expect(body?.errors[0].message).toBe(`The field ${prop} is required`);
         expect(body?.data).toBeNull();
 
         await request(URL_SERVER).post("/").set({ Authorization: token }).send(QUERY_DELETE_USER);

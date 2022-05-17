@@ -1,23 +1,12 @@
-import { Mutation, Resolver, InputType, Field, Arg, Ctx, Subscription, PubSub } from 'type-graphql';
-import { CommentResponse } from '../entity';
+import { Mutation, Resolver, Arg, Ctx, Subscription, PubSub } from 'type-graphql';
 import { Context } from 'apollo-server-core';
 import { PubSubEngine } from "graphql-subscriptions";
 import { AuthenticationError } from 'apollo-server-express';
-import { User, Post, Comment } from '../entity';
+import { User, Post, Comment, CommentResponse  } from '../entity';
 import { trigger } from '../utils';
+import { CommentInput } from '../inputs';
+import { IContextServer } from '../interface'
 
-export interface IContextServer {
-    id_user_token: string;
-}
-
-@InputType()
-class CommentInput {
-    @Field()
-    description: string = '';
-    
-    @Field()
-    id_post: string = '';
-}
 
 @Resolver()
 export class CommentResolver {
@@ -27,14 +16,14 @@ export class CommentResolver {
         @Ctx() { id_user_token:id }: Context<IContextServer>,
         @PubSub() pubSub: PubSubEngine
     ) {
-        if (!id) throw new AuthenticationError("Autenticación no valida, vuelva a iniciar sesión");
+        if (!id) throw new AuthenticationError("Authentication not valid, please log in again. 🤯");
         
         const [ user, post ] = await Promise.all([ 
             User.findOne({ where: { id: +id } }),
             Post.findOne({ where: { id: +id_post } })
          ])
 
-        if (!user) throw new AuthenticationError("User no exists");
+        if (!user) throw new AuthenticationError("User doesn't exist 🤨");
         
         if (!post) throw new AuthenticationError("Post no exists");
 

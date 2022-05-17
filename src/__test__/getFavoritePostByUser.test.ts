@@ -23,14 +23,14 @@ describe("FAVORITE 👉 GET FAVORITE BY USER", () => {
         let fake_token = "faketokenuser";
         const { body } = await request(URL_SERVER).post("/").set({ Authorization: fake_token }).send(QUERY_GET_FAVORITES_BY_USER);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
 
     test("It should display an error if the token is not sent.", async () => {
         const { body } = await request(URL_SERVER).post("/").send(QUERY_GET_FAVORITES_BY_USER);
 
-        expect(body?.errors[0].message).toBe(`Autenticación no valida, vuelva a iniciar sesión`);
+        expect(body?.errors[0].message).toBe(`Authentication not valid, please log in again. 🤯`);
         expect(body?.data).toBeNull();
     });
 
