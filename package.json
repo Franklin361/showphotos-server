@@ -4,13 +4,13 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build":"",
+        "build":"tsc -p tsconfig.json",
         "start": "NODE_ENV=production node dist/index.js",
         "dev": "NODE_ENV=development nodemon src/index.ts",
         "test": "jest __test__/"
     },
     "keywords": [],
-    "author": "",
+    "author": "Franklin",
     "license": "ISC",
     "devDependencies": {
         "@babel/preset-typescript": "7.16.7",
