@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import path from 'path';
 import { ApolloError } from 'apollo-server-express';
 
-export const PostgresDataSource = new DataSource({ 
+export const PostgresDataSource = new DataSource({
     type: 'postgres',
     entities: [
         path.join(__dirname, '../entity/**/**.ts'),
@@ -12,11 +12,11 @@ export const PostgresDataSource = new DataSource({
 })
 
 export async function startDatabaseConnection() {
-    
+
     try {
-        let url = process.env.NODE_ENV === 'development' ? process.env.DATABASE_URL_TEST : process.env.DATABASE_URL;
+        let url = process.env.DATABASE_URL;
         const database = PostgresDataSource.setOptions({ url })
-        
+
         await database.initialize();
 
         console.log('Data Source has been initialized! 🥳')
@@ -27,9 +27,9 @@ export async function startDatabaseConnection() {
     }
 }
 
-export async function closeDatabaseConnection(){
+export async function closeDatabaseConnection() {
     try {
-        if(PostgresDataSource.isInitialized){
+        if (PostgresDataSource.isInitialized) {
             await PostgresDataSource.destroy();
         }
     } catch (e) {
