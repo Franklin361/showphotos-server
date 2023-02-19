@@ -13,9 +13,10 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 export async function startServer() {
   const { resolvers, typeDefs } = await buildTypeDefsAndResolvers({
     resolvers: [UserResolver, PostResolver, CommentResolver, FavoriteResolver],
+    validate: false
   });
 
-  const schema = makeExecutableSchema({typeDefs,resolvers});
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
 
   const app = express();
   const httpServer = createServer(app);
@@ -25,8 +26,8 @@ export async function startServer() {
     server: httpServer,
     path: "/"
   });
-  
-  const serverCleanup = useServer({ schema, onConnect: ()=>{ console.log('connect') } }, wsServer);
+
+  const serverCleanup = useServer({ schema, onConnect: () => { console.log('connect') } }, wsServer);
 
   const server = new ApolloServer({
     schema,
@@ -53,7 +54,7 @@ export async function startServer() {
   });
 
   await server.start();
-  server.applyMiddleware({ app, path:'/' });
+  server.applyMiddleware({ app, path: '/' });
 
 
   return { app: httpServer, server };
